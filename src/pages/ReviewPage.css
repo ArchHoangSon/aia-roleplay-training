@@ -1,0 +1,196 @@
+/* Review Page styles */
+.review-page {
+    min-height: calc(100vh - 60px);
+    padding: var(--spacing-6) var(--spacing-4);
+    display: flex;
+    justify-content: center;
+}
+
+.review-container {
+    width: 100%;
+    max-width: 800px;
+}
+
+.review-header {
+    text-align: center;
+    margin-bottom: var(--spacing-6);
+}
+
+.review-header h1 {
+    margin-bottom: var(--spacing-2);
+}
+
+.review-description {
+    color: var(--gray-600);
+}
+
+/* Input Section */
+.review-input-section {
+    background: white;
+    padding: var(--spacing-6);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+}
+
+.api-key-section {
+    margin-bottom: var(--spacing-6);
+}
+
+.api-key-section label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: var(--spacing-2);
+}
+
+.api-key-input {
+    width: 100%;
+    padding: var(--spacing-3);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-base);
+    font-family: inherit;
+}
+
+.api-key-input:focus {
+    outline: none;
+    border-color: var(--aia-red);
+}
+
+.api-hint {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--gray-500);
+    margin-top: var(--spacing-1);
+}
+
+.api-hint a {
+    color: var(--aia-red);
+}
+
+/* Chatlog Section */
+.chatlog-section {
+    margin-bottom: var(--spacing-4);
+}
+
+.chatlog-section label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: var(--spacing-2);
+}
+
+.chatlog-input {
+    width: 100%;
+    padding: var(--spacing-3);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-family: inherit;
+    resize: vertical;
+    min-height: 300px;
+}
+
+.chatlog-input:focus {
+    outline: none;
+    border-color: var(--aia-red);
+}
+
+.chatlog-hint {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--gray-500);
+    margin-top: var(--spacing-1);
+}
+
+/* Error message */
+.error-message {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error);
+    padding: var(--spacing-3);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-4);
+    font-size: var(--font-size-sm);
+}
+
+/* Actions */
+.review-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing-4);
+    margin-top: var(--spacing-6);
+    padding-top: var(--spacing-4);
+    border-top: 1px solid var(--gray-100);
+}
+
+/* Result Section */
+.review-result-section {
+    background: white;
+    padding: var(--spacing-6);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-4);
+    padding-bottom: var(--spacing-4);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.result-header h2 {
+    margin: 0;
+}
+
+.result-actions {
+    display: flex;
+    gap: var(--spacing-2);
+}
+
+.result-content {
+    background: var(--gray-50);
+    padding: var(--spacing-4);
+    border-radius: var(--radius-md);
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.result-content pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: inherit;
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Spinner */
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+    margin-right: var(--spacing-2);
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .review-actions {
+        flex-direction: column;
+    }
+
+    .result-header {
+        flex-direction: column;
+        gap: var(--spacing-3);
+        align-items: flex-start;
+    }
+}
