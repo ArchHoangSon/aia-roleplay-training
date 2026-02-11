@@ -19,6 +19,7 @@ export interface Session {
     noteUpdatedAt?: string;
     createdAt: string;
     updatedAt: string;
+    completedAt?: string;
     status: 'active' | 'completed';
 }
 

@@ -38,6 +38,35 @@
     font-weight: 600;
 }
 
+.history-tabs {
+    display: flex;
+    padding: 0 var(--spacing-4);
+    border-bottom: 1px solid var(--gray-100);
+    background: var(--gray-50);
+    flex-shrink: 0;
+}
+
+.tab-btn {
+    padding: var(--spacing-3) var(--spacing-4);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    color: var(--gray-500);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.tab-btn:hover {
+    color: var(--aia-red);
+}
+
+.tab-btn.active {
+    color: var(--aia-red);
+    border-bottom-color: var(--aia-red);
+}
+
 .sessions {
     flex: 1;
     overflow-y: auto;

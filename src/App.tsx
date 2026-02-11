@@ -7,6 +7,7 @@ import CustomerSetupPage from './pages/CustomerSetupPage';
 import PromptResultPage from './pages/PromptResultPage';
 import ReviewPage from './pages/ReviewPage';
 import HistoryPage from './pages/HistoryPage';
+import RoleplayPage from './pages/RoleplayPage';
 import './styles/global.css';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
                     <Route path="/customer-setup" element={<CustomerSetupPage />} />
                     <Route path="/prompt-result" element={<PromptResultPage />} />
                     <Route path="/review" element={<ReviewPage />} />
+                    <Route path="/roleplay" element={<RoleplayPage />} />
                     <Route path="/history" element={<HistoryPage />} />
                 </Routes>
             </div>

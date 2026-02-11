@@ -2,9 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { generateContextPrompt } from '../prompts/roleplayPrompts';
+import { useSession } from '../contexts/SessionContext';
 import { saveGeneratedPrompt } from '../services/storageService';
 import { getFlowById, getStagesForFlow } from '../constants/consultingFlows';
-import { CheckCircleIcon, CopyIcon, CheckIcon, EyeIcon, EyeOffIcon, DownloadIcon, ArrowLeftIcon, BookOpenIcon } from '../components/common/Icons';
+import { CheckCircleIcon, CopyIcon, CheckIcon, EyeIcon, EyeOffIcon, DownloadIcon, ArrowLeftIcon, BookOpenIcon, SparklesIcon } from '../components/common/Icons';
 import './PromptResultPage.css';
 
 interface LocationState {
@@ -18,6 +19,7 @@ interface LocationState {
 const PromptResultPage: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const { startSession } = useSession();
     const [contextPrompt, setContextPrompt] = useState('');
     const [copied, setCopied] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
@@ -93,6 +95,18 @@ const PromptResultPage: React.FC = () => {
         navigate('/customer-setup');
     };
 
+    const handleStartRoleplay = async () => {
+        if (!customerData || !advisorProfile) return;
+
+        try {
+            await startSession(customerData, flowType, segment);
+            navigate('/roleplay');
+        } catch (err) {
+            console.error('Failed to start roleplay:', err);
+            alert('Không thể bắt đầu roleplay. Vui lòng kiểm tra API Key.');
+        }
+    };
+
     const flow = getFlowById(flowType);
     const stages = getStagesForFlow(flowType);
 
@@ -165,6 +179,13 @@ const PromptResultPage: React.FC = () => {
                             {showPreview ? <><EyeOffIcon size={16} /> Ẩn</> : <><EyeIcon size={16} /> Xem</>} prompt
                         </button>
                         <button
+                            className="btn btn-primary"
+                            onClick={handleStartRoleplay}
+                            title="Bắt đầu luyện tập trực tiếp trong ứng dụng"
+                        >
+                            <SparklesIcon size={16} /> Bắt đầu Roleplay
+                        </button>
+                        <button
                             className="btn btn-secondary"
                             onClick={handleDownloadJSON}
                         >
@@ -198,6 +219,9 @@ const PromptResultPage: React.FC = () => {
                     </button>
                     <button className="btn btn-primary" onClick={handleCopy}>
                         {copied ? <><CheckIcon size={16} /> Đã copy!</> : <><CopyIcon size={16} /> Copy Prompt</>}
+                    </button>
+                    <button className="btn btn-primary" onClick={handleStartRoleplay} style={{ background: 'var(--success)' }}>
+                        <SparklesIcon size={16} /> Bắt đầu Roleplay
                     </button>
                 </div>
             </div>

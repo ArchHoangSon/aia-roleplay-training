@@ -131,7 +131,6 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) =>
             ...session,
             status: 'completed',
             note,
-            // @ts-ignore - completedAt might not be in Session interface yet but we added it here
             completedAt: new Date().toISOString()
         };
 
