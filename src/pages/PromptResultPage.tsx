@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { generateContextPrompt } from '../prompts/roleplayPrompts';
 import { saveGeneratedPrompt } from '../services/storageService';
 import { getFlowById, getStagesForFlow } from '../constants/consultingFlows';
+import { CheckCircleIcon, CopyIcon, CheckIcon, EyeIcon, EyeOffIcon, DownloadIcon, ArrowLeftIcon, BookOpenIcon } from '../components/common/Icons';
 import './PromptResultPage.css';
 
 interface LocationState {
@@ -29,7 +30,6 @@ const PromptResultPage: React.FC = () => {
             return;
         }
 
-        // Generate the context prompt with selectedStages
         const prompt = generateContextPrompt({
             advisor: advisorProfile,
             customer: customerData,
@@ -40,7 +40,6 @@ const PromptResultPage: React.FC = () => {
 
         setContextPrompt(prompt);
 
-        // Save to history
         saveGeneratedPrompt({
             customerName: customerData.name,
             flowType,
@@ -56,7 +55,6 @@ const PromptResultPage: React.FC = () => {
             setCopied(true);
             setTimeout(() => setCopied(false), 3000);
         } catch (err) {
-            // Fallback for older browsers
             const textarea = document.createElement('textarea');
             textarea.value = contextPrompt;
             document.body.appendChild(textarea);
@@ -105,7 +103,9 @@ const PromptResultPage: React.FC = () => {
             <div className="result-container">
                 {/* Success Header */}
                 <div className="result-header">
-                    <div className="success-icon">✅</div>
+                    <div className="success-icon">
+                        <CheckCircleIcon size={32} />
+                    </div>
                     <h1>Context Prompt đã sẵn sàng!</h1>
                     <p className="subtitle">
                         Copy và paste vào Gemini, ChatGPT, hoặc AI khác để bắt đầu roleplay
@@ -148,31 +148,32 @@ const PromptResultPage: React.FC = () => {
                 <div className="copy-section">
                     <div className="copy-header">
                         <button
-                            className={`btn-copy ${copied ? 'copied' : ''}`}
+                            className={`btn ${copied ? 'btn-copied' : 'btn-primary'}`}
                             onClick={handleCopy}
+                            aria-label={copied ? 'Đã copy' : 'Copy prompt'}
                         >
                             {copied ? (
-                                <>✓ Đã copy!</>
+                                <><CheckIcon size={16} /> Đã copy!</>
                             ) : (
-                                <>📋 Copy Prompt</>
+                                <><CopyIcon size={16} /> Copy Prompt</>
                             )}
                         </button>
                         <button
-                            className="btn-preview"
+                            className="btn btn-secondary"
                             onClick={() => setShowPreview(!showPreview)}
                         >
-                            {showPreview ? '🙈 Ẩn' : '👁️ Xem'} prompt
+                            {showPreview ? <><EyeOffIcon size={16} /> Ẩn</> : <><EyeIcon size={16} /> Xem</>} prompt
                         </button>
                         <button
-                            className="btn-download"
+                            className="btn btn-secondary"
                             onClick={handleDownloadJSON}
                         >
-                            📥 Download JSON
+                            <DownloadIcon size={16} /> Download JSON
                         </button>
                     </div>
 
                     {showPreview && (
-                        <div className="prompt-preview">
+                        <div className="prompt-preview animate-in">
                             <pre>{contextPrompt}</pre>
                         </div>
                     )}
@@ -180,7 +181,7 @@ const PromptResultPage: React.FC = () => {
 
                 {/* Instructions */}
                 <div className="instructions">
-                    <h4>📖 Hướng dẫn sử dụng:</h4>
+                    <h4><BookOpenIcon size={16} /> Hướng dẫn sử dụng:</h4>
                     <ol>
                         <li>Nhấn <strong>Copy Prompt</strong> ở trên</li>
                         <li>Mở <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer">Gemini</a>, <a href="https://chat.openai.com" target="_blank" rel="noopener noreferrer">ChatGPT</a>, hoặc AI khác</li>
@@ -192,10 +193,11 @@ const PromptResultPage: React.FC = () => {
                 {/* Actions */}
                 <div className="result-actions">
                     <button className="btn btn-secondary" onClick={handleNewPrompt}>
-                        ← Tạo khách hàng khác
+                        <ArrowLeftIcon size={16} />
+                        Tạo khách hàng khác
                     </button>
                     <button className="btn btn-primary" onClick={handleCopy}>
-                        {copied ? '✓ Đã copy!' : '📋 Copy Prompt'}
+                        {copied ? <><CheckIcon size={16} /> Đã copy!</> : <><CopyIcon size={16} /> Copy Prompt</>}
                     </button>
                 </div>
             </div>

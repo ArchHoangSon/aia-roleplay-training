@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getSessions, deleteSession, saveNote, Session } from '../services/storageService';
 import { getCustomerDisplayName } from '../services/customerGenerator';
+import { PlusIcon, UserIcon, MessageSquareIcon, EditIcon, TrashIcon, CheckIcon, FileTextIcon } from '../components/common/Icons';
 import './HistoryPage.css';
 
 const HistoryPage: React.FC = () => {
@@ -56,11 +57,17 @@ const HistoryPage: React.FC = () => {
                 <aside className="sessions-list">
                     <div className="list-header">
                         <h2>Lịch sử Roleplay</h2>
-                        <Link to="/customer-setup" className="btn btn-primary btn-sm">+ Mới</Link>
+                        <Link to="/customer-setup" className="btn btn-primary btn-sm" aria-label="Tạo phiên mới">
+                            <PlusIcon size={14} />
+                            Mới
+                        </Link>
                     </div>
 
                     {sessions.length === 0 ? (
                         <div className="empty-state">
+                            <div className="empty-state-icon">
+                                <MessageSquareIcon size={32} />
+                            </div>
                             <p>Chưa có phiên roleplay nào</p>
                             <Link to="/customer-setup" className="btn btn-secondary">Bắt đầu ngay</Link>
                         </div>
@@ -84,9 +91,9 @@ const HistoryPage: React.FC = () => {
                                     </div>
                                     <div className="session-badges">
                                         <span className={`status-badge ${session.status}`}>
-                                            {session.status === 'completed' ? '✓' : '...'}
+                                            {session.status === 'completed' ? <CheckIcon size={12} /> : '...'}
                                         </span>
-                                        {session.note && <span className="note-badge">📝</span>}
+                                        {session.note && <span className="note-badge"><FileTextIcon size={12} /></span>}
                                     </div>
                                 </button>
                             ))}
@@ -110,14 +117,16 @@ const HistoryPage: React.FC = () => {
                                 <button
                                     className="btn btn-ghost text-error"
                                     onClick={() => handleDeleteSession(selectedSession.id)}
+                                    aria-label="Xóa phiên"
                                 >
+                                    <TrashIcon size={16} />
                                     Xóa
                                 </button>
                             </div>
 
                             {/* Customer info */}
                             <section className="detail-section">
-                                <h3>👤 Thông tin khách hàng</h3>
+                                <h3><UserIcon size={16} /> Thông tin khách hàng</h3>
                                 <div className="info-grid">
                                     {selectedSession.customer?.basicInfo &&
                                         Object.entries(selectedSession.customer.basicInfo).map(([key, value]) => (
@@ -139,7 +148,7 @@ const HistoryPage: React.FC = () => {
 
                             {/* Conversation */}
                             <section className="detail-section">
-                                <h3>💬 Cuộc trò chuyện ({selectedSession.messages.length} tin nhắn)</h3>
+                                <h3><MessageSquareIcon size={16} /> Cuộc trò chuyện ({selectedSession.messages.length} tin nhắn)</h3>
                                 <div className="conversation">
                                     {selectedSession.messages.map((msg, index) => (
                                         <div key={index} className={`conv-message ${msg.role}`}>
@@ -155,7 +164,7 @@ const HistoryPage: React.FC = () => {
                             {/* Notes */}
                             <section className="detail-section">
                                 <div className="section-header">
-                                    <h3>📝 Ghi chú</h3>
+                                    <h3><EditIcon size={16} /> Ghi chú</h3>
                                     {!editingNote && (
                                         <button className="btn btn-ghost btn-sm" onClick={() => setEditingNote(true)}>
                                             Chỉnh sửa
@@ -190,6 +199,9 @@ const HistoryPage: React.FC = () => {
                         </>
                     ) : (
                         <div className="empty-detail">
+                            <div className="empty-detail-icon">
+                                <MessageSquareIcon size={40} />
+                            </div>
                             <p>Chọn một phiên để xem chi tiết</p>
                         </div>
                     )}

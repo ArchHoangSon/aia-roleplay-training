@@ -1,196 +1,194 @@
-/* Review Page styles */
+/* ReviewPage - Premium analysis design */
+
 .review-page {
-    min-height: calc(100vh - 60px);
-    padding: var(--spacing-6) var(--spacing-4);
-    display: flex;
-    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--spacing-8) var(--spacing-4);
+    animation: slideUp 0.5s var(--ease-out) both;
 }
 
 .review-container {
-    width: 100%;
-    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
 }
 
+/* Header */
 .review-header {
-    text-align: center;
-    margin-bottom: var(--spacing-6);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-4);
+}
+
+.review-header-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: var(--gradient-brand);
+    color: white;
+    border-radius: var(--radius-xl);
+    flex-shrink: 0;
 }
 
 .review-header h1 {
-    margin-bottom: var(--spacing-2);
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin-bottom: var(--spacing-1);
 }
 
 .review-description {
-    color: var(--gray-600);
+    font-size: var(--font-size-sm);
+    color: var(--gray-500);
+    margin-bottom: 0;
+    line-height: 1.6;
 }
 
 /* Input Section */
 .review-input-section {
-    background: white;
-    padding: var(--spacing-6);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--gray-200);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
 }
 
-.api-key-section {
-    margin-bottom: var(--spacing-6);
+.api-key-section,
+.chatlog-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
 }
 
-.api-key-section label {
-    display: block;
-    font-weight: 500;
-    margin-bottom: var(--spacing-2);
+.api-key-section label,
+.chatlog-section label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--gray-700);
 }
 
 .api-key-input {
-    width: 100%;
-    padding: var(--spacing-3);
-    border: 1px solid var(--gray-300);
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-base);
-    font-family: inherit;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
 }
 
-.api-key-input:focus {
-    outline: none;
-    border-color: var(--aia-red);
-}
-
-.api-hint {
-    display: block;
+.api-hint,
+.chatlog-hint {
     font-size: var(--font-size-xs);
-    color: var(--gray-500);
-    margin-top: var(--spacing-1);
+    color: var(--gray-400);
 }
 
 .api-hint a {
     color: var(--aia-red);
-}
-
-/* Chatlog Section */
-.chatlog-section {
-    margin-bottom: var(--spacing-4);
-}
-
-.chatlog-section label {
-    display: block;
     font-weight: 500;
-    margin-bottom: var(--spacing-2);
 }
 
 .chatlog-input {
-    width: 100%;
-    padding: var(--spacing-3);
-    border: 1px solid var(--gray-300);
-    border-radius: var(--radius-md);
+    min-height: 250px;
     font-size: var(--font-size-sm);
-    font-family: inherit;
-    resize: vertical;
-    min-height: 300px;
+    line-height: 1.6;
 }
 
-.chatlog-input:focus {
-    outline: none;
-    border-color: var(--aia-red);
-}
-
-.chatlog-hint {
-    display: block;
-    font-size: var(--font-size-xs);
-    color: var(--gray-500);
-    margin-top: var(--spacing-1);
-}
-
-/* Error message */
+/* Error */
 .error-message {
-    background: rgba(239, 68, 68, 0.1);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3) var(--spacing-4);
+    background: var(--error-light);
     color: var(--error);
-    padding: var(--spacing-3);
-    border-radius: var(--radius-md);
-    margin-bottom: var(--spacing-4);
+    border-radius: var(--radius-lg);
     font-size: var(--font-size-sm);
+    animation: slideDown 0.3s var(--ease-out);
 }
 
 /* Actions */
 .review-actions {
     display: flex;
     justify-content: space-between;
-    gap: var(--spacing-4);
-    margin-top: var(--spacing-6);
-    padding-top: var(--spacing-4);
-    border-top: 1px solid var(--gray-100);
+    gap: var(--spacing-3);
 }
 
 /* Result Section */
 .review-result-section {
-    background: white;
-    padding: var(--spacing-6);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--gray-200);
-}
-
-.result-header {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: var(--spacing-5);
+}
+
+.review-result-section .result-header {
+    display: flex;
     align-items: center;
-    margin-bottom: var(--spacing-4);
-    padding-bottom: var(--spacing-4);
-    border-bottom: 1px solid var(--gray-100);
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--spacing-3);
 }
 
-.result-header h2 {
-    margin: 0;
+.review-result-section .result-header h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
 }
 
-.result-actions {
+.review-result-section .result-actions {
     display: flex;
     gap: var(--spacing-2);
 }
 
 .result-content {
-    background: var(--gray-50);
-    padding: var(--spacing-4);
-    border-radius: var(--radius-md);
-    max-height: 500px;
-    overflow-y: auto;
+    background: white;
+    border: 1px solid var(--gray-100);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-6);
+    box-shadow: var(--shadow-sm);
 }
 
 .result-content pre {
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    font-family: inherit;
+    font-family: var(--font-family);
     font-size: var(--font-size-sm);
-    line-height: 1.6;
+    color: var(--gray-700);
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.7;
     margin: 0;
 }
 
-/* Spinner */
-.spinner {
-    display: inline-block;
+/* Spinner override for dark background */
+.review-actions .spinner-dark {
     width: 16px;
     height: 16px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: white;
-    animation: spin 0.8s linear infinite;
-    margin-right: var(--spacing-2);
+    border-width: 2px;
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
 
-/* Responsive */
 @media (max-width: 768px) {
-    .review-actions {
-        flex-direction: column;
+    .review-page {
+        padding: var(--spacing-4) var(--spacing-3);
     }
 
-    .result-header {
+    .review-header {
         flex-direction: column;
         gap: var(--spacing-3);
+    }
+
+    .review-actions {
+        flex-direction: column-reverse;
+    }
+
+    .review-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .review-result-section .result-header {
+        flex-direction: column;
         align-items: flex-start;
     }
 }

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { generateReviewPrompt } from '../prompts/reviewPrompts';
 import { getAdvisorProfile, getApiKey } from '../services/storageService';
 import { initializeGemini, sendMessage } from '../services/geminiService';
+import { ClipboardIcon, KeyIcon, MessageSquareIcon, SearchIcon, AlertTriangleIcon, BarChartIcon, CopyIcon, RefreshIcon, EditIcon, ArrowLeftIcon, HomeIcon } from '../components/common/Icons';
 import './ReviewPage.css';
 
 const ReviewPage: React.FC = () => {
@@ -40,16 +41,12 @@ const ReviewPage: React.FC = () => {
         setResult(null);
 
         try {
-            // Initialize Gemini with API key
             const initialized = initializeGemini(apiKey);
             if (!initialized) {
                 throw new Error('Không thể khởi tạo Gemini API');
             }
 
-            // Generate review prompt
             const reviewPrompt = generateReviewPrompt(chatLog, advisorProfile || {});
-
-            // Send to Gemini
             const response = await sendMessage(reviewPrompt);
             setResult(response);
         } catch (err: any) {
@@ -77,17 +74,25 @@ const ReviewPage: React.FC = () => {
         <div className="review-page">
             <div className="review-container">
                 <div className="review-header">
-                    <h1>📋 Review Cuộc Trò Chuyện</h1>
-                    <p className="review-description">
-                        Paste cuộc trò chuyện roleplay đã hoàn tất để được AI phân tích ưu/khuyết điểm và nhận gợi ý cải thiện.
-                    </p>
+                    <div className="review-header-icon">
+                        <ClipboardIcon size={24} />
+                    </div>
+                    <div>
+                        <h1>Review Cuộc Trò Chuyện</h1>
+                        <p className="review-description">
+                            Paste cuộc trò chuyện roleplay đã hoàn tất để được AI phân tích ưu/khuyết điểm và nhận gợi ý cải thiện.
+                        </p>
+                    </div>
                 </div>
 
                 {!result ? (
                     <div className="review-input-section">
                         {/* API Key Input */}
                         <div className="api-key-section">
-                            <label>🔑 Gemini API Key</label>
+                            <label>
+                                <KeyIcon size={14} />
+                                Gemini API Key
+                            </label>
                             <input
                                 type="password"
                                 value={apiKey}
@@ -105,7 +110,10 @@ const ReviewPage: React.FC = () => {
 
                         {/* Chat Log Input */}
                         <div className="chatlog-section">
-                            <label>💬 Cuộc trò chuyện</label>
+                            <label>
+                                <MessageSquareIcon size={14} />
+                                Cuộc trò chuyện
+                            </label>
                             <textarea
                                 value={chatLog}
                                 onChange={(e) => setChatLog(e.target.value)}
@@ -120,13 +128,15 @@ const ReviewPage: React.FC = () => {
 
                         {error && (
                             <div className="error-message">
-                                ⚠️ {error}
+                                <AlertTriangleIcon size={16} />
+                                {error}
                             </div>
                         )}
 
                         <div className="review-actions">
                             <button className="btn btn-secondary" onClick={() => navigate('/')}>
-                                ← Quay lại
+                                <ArrowLeftIcon size={16} />
+                                Quay lại
                             </button>
                             <button
                                 className="btn btn-primary"
@@ -135,25 +145,33 @@ const ReviewPage: React.FC = () => {
                             >
                                 {isAnalyzing ? (
                                     <>
-                                        <span className="spinner"></span>
+                                        <span className="spinner spinner-dark"></span>
                                         Đang phân tích...
                                     </>
                                 ) : (
-                                    '🔍 Phân tích cuộc trò chuyện'
+                                    <>
+                                        <SearchIcon size={16} />
+                                        Phân tích cuộc trò chuyện
+                                    </>
                                 )}
                             </button>
                         </div>
                     </div>
                 ) : (
-                    <div className="review-result-section">
+                    <div className="review-result-section animate-in">
                         <div className="result-header">
-                            <h2>📊 Kết quả phân tích</h2>
+                            <h2>
+                                <BarChartIcon size={20} />
+                                Kết quả phân tích
+                            </h2>
                             <div className="result-actions">
                                 <button className="btn btn-ghost btn-sm" onClick={handleCopyResult}>
-                                    📋 Copy kết quả
+                                    <CopyIcon size={14} />
+                                    Copy kết quả
                                 </button>
                                 <button className="btn btn-ghost btn-sm" onClick={handleReset}>
-                                    🔄 Phân tích mới
+                                    <RefreshIcon size={14} />
+                                    Phân tích mới
                                 </button>
                             </div>
                         </div>
@@ -164,10 +182,12 @@ const ReviewPage: React.FC = () => {
 
                         <div className="review-actions">
                             <button className="btn btn-secondary" onClick={() => navigate('/')}>
-                                ← Về trang chủ
+                                <HomeIcon size={16} />
+                                Về trang chủ
                             </button>
                             <button className="btn btn-primary" onClick={handleReset}>
-                                📝 Phân tích cuộc khác
+                                <EditIcon size={16} />
+                                Phân tích cuộc khác
                             </button>
                         </div>
                     </div>

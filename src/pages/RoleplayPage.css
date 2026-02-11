@@ -1,173 +1,242 @@
-/* Roleplay Page styles */
+/* RoleplayPage - Premium chat interface */
+
 .roleplay-page {
     display: flex;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 64px);
     overflow: hidden;
 }
 
-/* Sidebar */
+/* ==========================================================================
+   SIDEBAR
+   ========================================================================== */
+
 .roleplay-sidebar {
-    width: 320px;
-    background-color: white;
-    border-right: 1px solid var(--gray-200);
+    position: relative;
+    background: white;
+    border-right: 1px solid var(--gray-100);
     display: flex;
     flex-direction: column;
-    position: relative;
-    transition: width var(--transition-normal);
+    transition: width 0.3s var(--ease-out);
+    overflow: hidden;
+}
+
+.roleplay-sidebar.open {
+    width: 300px;
+    padding: var(--spacing-4);
 }
 
 .roleplay-sidebar.closed {
     width: 40px;
+    align-items: center;
+    padding-top: var(--spacing-4);
 }
 
 .sidebar-toggle {
     position: absolute;
-    top: var(--spacing-4);
+    top: var(--spacing-3);
     right: var(--spacing-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 28px;
     height: 28px;
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius-sm);
-    background: white;
+    border-radius: var(--radius-md);
+    background: var(--gray-50);
+    border: 1px solid var(--gray-150, var(--gray-100));
+    color: var(--gray-500);
     cursor: pointer;
-    font-size: var(--font-size-sm);
-    z-index: 10;
+    transition: all var(--transition-fast);
+    z-index: 2;
 }
 
+.roleplay-sidebar.closed .sidebar-toggle {
+    position: static;
+    right: auto;
+}
+
+.sidebar-toggle:hover {
+    background: var(--gray-100);
+    color: var(--gray-700);
+}
+
+/* Sidebar Sections */
 .sidebar-section {
-    padding: var(--spacing-4);
+    margin-bottom: var(--spacing-4);
+    padding-bottom: var(--spacing-4);
     border-bottom: 1px solid var(--gray-100);
 }
 
+.sidebar-section:last-of-type {
+    border-bottom: none;
+}
+
 .sidebar-section h3 {
-    font-size: var(--font-size-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
     color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
     margin-bottom: var(--spacing-3);
 }
 
 .customer-info {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-2);
     margin-bottom: var(--spacing-2);
 }
 
 .customer-name {
+    font-size: var(--font-size-sm);
     font-weight: 600;
-    font-size: var(--font-size-lg);
+    color: var(--gray-800);
+    margin-bottom: var(--spacing-1);
 }
 
 .personality-tag {
-    font-size: var(--font-size-xs);
-    background-color: var(--aia-red);
-    color: white;
-    padding: var(--spacing-1) var(--spacing-2);
+    display: inline-block;
+    padding: 2px var(--spacing-2);
+    background: var(--aia-red-50);
+    color: var(--aia-red);
     border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
 }
 
 .customer-story {
-    font-size: var(--font-size-sm);
-    color: var(--gray-600);
-    font-style: italic;
+    font-size: var(--font-size-xs);
+    color: var(--gray-500);
     line-height: 1.5;
+    font-style: italic;
 }
 
-/* Stage list */
+/* Stage List */
 .stage-list {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-1);
 }
 
-.stage-item {
+.roleplay-sidebar .stage-item {
     display: flex;
     align-items: center;
     gap: var(--spacing-2);
-    padding: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-2);
+    border-radius: var(--radius-md);
+    background: transparent;
     border: none;
-    background: none;
-    text-align: left;
     cursor: pointer;
-    border-radius: var(--radius-sm);
-    transition: background-color var(--transition-fast);
+    font-family: inherit;
+    text-align: left;
+    transition: all var(--transition-fast);
+    width: 100%;
 }
 
-.stage-item:hover {
-    background-color: var(--gray-50);
+.roleplay-sidebar .stage-item:hover {
+    background: var(--gray-50);
 }
 
-.stage-item.active {
-    background-color: rgba(200, 16, 46, 0.05);
+.roleplay-sidebar .stage-item.active {
+    background: var(--aia-red-50);
 }
 
-.stage-item.active .stage-number {
-    background-color: var(--aia-red);
-    color: white;
+.roleplay-sidebar .stage-item.completed {
+    opacity: 0.6;
 }
 
-.stage-item.completed .stage-number {
-    background-color: var(--success);
-    color: white;
-}
-
-.stage-number {
-    width: 24px;
-    height: 24px;
-    background-color: var(--gray-200);
-    border-radius: 50%;
+.roleplay-sidebar .stage-number {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: var(--font-size-xs);
+    width: 22px;
+    height: 22px;
+    border-radius: var(--radius-full);
+    background: var(--gray-100);
+    font-size: 0.625rem;
     font-weight: 600;
+    color: var(--gray-500);
     flex-shrink: 0;
 }
 
-.stage-name {
-    font-size: var(--font-size-sm);
+.roleplay-sidebar .stage-item.active .stage-number {
+    background: var(--aia-red);
+    color: white;
+}
+
+.roleplay-sidebar .stage-item.completed .stage-number {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.roleplay-sidebar .stage-name {
+    font-size: var(--font-size-xs);
     color: var(--gray-700);
+}
+
+.roleplay-sidebar .stage-item.active .stage-name {
+    font-weight: 500;
+    color: var(--aia-red);
 }
 
 /* Tips */
 .tips-list {
-    list-style: none;
+    padding-left: var(--spacing-4);
+    margin: 0;
 }
 
 .tips-list li {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
     color: var(--gray-600);
-    padding: var(--spacing-1) 0;
-    padding-left: var(--spacing-4);
-    position: relative;
-}
-
-.tips-list li::before {
-    content: '•';
-    position: absolute;
-    left: 0;
-    color: var(--aia-red);
+    margin-bottom: var(--spacing-2);
+    line-height: 1.5;
 }
 
 .end-btn {
-    margin: var(--spacing-4);
     margin-top: auto;
+    width: 100%;
+    justify-content: center;
 }
 
-/* Main chat area */
+/* ==========================================================================
+   MAIN CHAT AREA
+   ========================================================================== */
+
 .roleplay-main {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: var(--gray-50);
+    min-width: 0;
+    background: var(--gray-50);
 }
 
 .chat-header {
-    background-color: white;
-    padding: var(--spacing-4) var(--spacing-6);
-    border-bottom: 1px solid var(--gray-200);
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-3) var(--spacing-4);
+    background: white;
+    border-bottom: 1px solid var(--gray-100);
+    flex-shrink: 0;
+}
+
+.btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-100);
+    background: white;
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.btn-icon:hover {
+    background: var(--gray-50);
+    color: var(--gray-800);
 }
 
 .chat-info {
@@ -177,38 +246,64 @@
 }
 
 .chat-info h2 {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
+    font-weight: 600;
 }
 
 .stage-badge {
-    font-size: var(--font-size-xs);
-    background-color: var(--gray-100);
-    color: var(--gray-600);
-    padding: var(--spacing-1) var(--spacing-3);
+    display: inline-flex;
+    padding: 2px var(--spacing-3);
+    background: var(--aia-red-50);
+    color: var(--aia-red);
     border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
 }
 
 /* Messages */
 .chat-messages {
     flex: 1;
     overflow-y: auto;
-    padding: var(--spacing-6);
+    padding: var(--spacing-4);
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-4);
+    gap: var(--spacing-3);
 }
 
 .chat-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    padding: var(--spacing-12);
+    gap: var(--spacing-2);
+    padding: var(--spacing-8) 0;
+    margin: auto;
+}
+
+.chat-empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    background: var(--gray-100);
+    color: var(--gray-400);
+    margin-bottom: var(--spacing-2);
+}
+
+.chat-empty p {
+    font-size: var(--font-size-sm);
     color: var(--gray-500);
+    margin: 0;
 }
 
 .message {
-    max-width: 70%;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-1);
+    max-width: 75%;
+    animation: slideUp 0.25s var(--ease-out);
 }
 
 .message.user {
@@ -221,166 +316,218 @@
 
 .message-content {
     padding: var(--spacing-3) var(--spacing-4);
-    border-radius: var(--radius-lg);
-    line-height: 1.5;
-    white-space: pre-wrap;
+    border-radius: var(--radius-xl);
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    word-break: break-word;
 }
 
 .message.user .message-content {
-    background-color: var(--aia-red);
+    background: var(--aia-red);
     color: white;
     border-bottom-right-radius: var(--radius-sm);
 }
 
 .message.assistant .message-content {
-    background-color: white;
-    border: 1px solid var(--gray-200);
+    background: white;
+    color: var(--gray-800);
+    border: 1px solid var(--gray-100);
     border-bottom-left-radius: var(--radius-sm);
 }
 
 .message-time {
-    font-size: var(--font-size-xs);
+    font-size: 0.625rem;
     color: var(--gray-400);
+    margin-top: 2px;
+    padding: 0 var(--spacing-2);
 }
 
 .message.user .message-time {
     text-align: right;
 }
 
-/* Typing indicator */
-.typing {
+/* Typing Indicator */
+.message-content.typing {
     display: flex;
+    align-items: center;
     gap: 4px;
-    padding: var(--spacing-4);
+    padding: var(--spacing-3) var(--spacing-5);
 }
 
-.typing span {
-    width: 8px;
-    height: 8px;
-    background-color: var(--gray-400);
+.message-content.typing span {
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    animation: typing 1.4s infinite ease-in-out both;
+    background: var(--gray-400);
+    animation: typing 1.4s infinite ease-in-out;
 }
 
-.typing span:nth-child(1) {
-    animation-delay: -0.32s;
+.message-content.typing span:nth-child(1) {
+    animation-delay: 0s;
 }
 
-.typing span:nth-child(2) {
-    animation-delay: -0.16s;
+.message-content.typing span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.message-content.typing span:nth-child(3) {
+    animation-delay: 0.4s;
 }
 
 @keyframes typing {
 
     0%,
-    80%,
+    60%,
     100% {
-        transform: scale(0.6);
-        opacity: 0.5;
+        opacity: 0.3;
+        transform: scale(0.8);
     }
 
-    40% {
-        transform: scale(1);
+    30% {
         opacity: 1;
+        transform: scale(1);
     }
 }
 
+/* Chat error */
 .chat-error {
-    padding: var(--spacing-2) var(--spacing-6);
-    background-color: var(--error-light);
+    padding: var(--spacing-2) var(--spacing-4);
+    background: var(--error-light);
     color: var(--error);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
+    text-align: center;
 }
 
-/* Input */
+/* Chat Input */
 .chat-input {
-    background-color: white;
-    padding: var(--spacing-4) var(--spacing-6);
-    border-top: 1px solid var(--gray-200);
     display: flex;
-    gap: var(--spacing-3);
     align-items: flex-end;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3) var(--spacing-4);
+    background: white;
+    border-top: 1px solid var(--gray-100);
 }
 
 .input-field {
     flex: 1;
-    border: 1px solid var(--gray-300);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-3) var(--spacing-4);
-    font-size: var(--font-size-base);
-    font-family: inherit;
     resize: none;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-sm);
+    font-family: inherit;
+    line-height: 1.5;
     max-height: 120px;
+    min-height: 40px;
+    transition: border-color var(--transition-fast);
 }
 
 .input-field:focus {
     outline: none;
     border-color: var(--aia-red);
+    box-shadow: 0 0 0 3px var(--aia-red-100);
 }
 
 .send-btn {
-    flex-shrink: 0;
-}
-
-/* Modal */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
-    padding: var(--spacing-4);
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: var(--radius-lg);
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   MODAL
+   ========================================================================== */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    animation: fadeIn 0.2s ease;
 }
 
 .modal {
-    background-color: white;
-    border-radius: var(--radius-lg);
+    background: white;
+    border-radius: var(--radius-xl);
     padding: var(--spacing-6);
-    max-width: 500px;
-    width: 100%;
+    width: 90%;
+    max-width: 480px;
     box-shadow: var(--shadow-xl);
+    animation: scaleIn 0.3s var(--ease-spring);
 }
 
-.modal h3 {
-    margin-bottom: var(--spacing-2);
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-4);
 }
 
-.modal .textarea {
-    margin-top: var(--spacing-4);
+.modal-header h3 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+}
+
+.modal-close {
+    border: none;
+    background: var(--gray-50);
+}
+
+.modal-close:hover {
+    background: var(--gray-100);
+}
+
+.modal .text-gray {
+    font-size: var(--font-size-sm);
+    color: var(--gray-500);
+    margin-bottom: var(--spacing-3);
 }
 
 .modal-actions {
     display: flex;
-    justify-content: flex-end;
     gap: var(--spacing-3);
+    justify-content: flex-end;
     margin-top: var(--spacing-4);
 }
 
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
 @media (max-width: 768px) {
-    .roleplay-sidebar {
-        position: absolute;
+    .roleplay-sidebar.open {
+        position: fixed;
+        top: 64px;
         left: 0;
-        top: 0;
-        height: 100%;
-        z-index: 100;
-        box-shadow: var(--shadow-lg);
+        bottom: 0;
+        width: 280px;
+        z-index: 50;
+        box-shadow: var(--shadow-xl);
     }
 
     .roleplay-sidebar.closed {
-        width: 0;
-        border-right: none;
-    }
-
-    .sidebar-toggle {
-        left: 100%;
-        right: auto;
-        border-left: none;
-        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        display: none;
     }
 
     .message {
-        max-width: 85%;
+        max-width: 88%;
+    }
+
+    .chat-input {
+        padding: var(--spacing-2) var(--spacing-3);
+    }
+
+    .modal {
+        width: 95%;
+        padding: var(--spacing-4);
     }
 }

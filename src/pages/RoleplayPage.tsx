@@ -5,6 +5,7 @@ import { useSession } from '../contexts/SessionContext';
 import { getStagesForFlow } from '../constants/consultingFlows';
 import { getCustomerDisplayName } from '../services/customerGenerator';
 import { PERSONALITY_BEHAVIORS } from '../constants/behaviorPatterns';
+import { UserIcon, BarChartIcon, LightbulbIcon, ChevronLeftIcon, ChevronRightIcon, SendIcon, PanelLeftIcon, MessageSquareIcon, XIcon, SaveIcon } from '../components/common/Icons';
 import './RoleplayPage.css';
 
 const RoleplayPage: React.FC = () => {
@@ -17,19 +18,16 @@ const RoleplayPage: React.FC = () => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
 
-    // Redirect if no session
     useEffect(() => {
         if (!session) {
-            navigate('/'); // Changed from /setup to / as backup
+            navigate('/');
         }
     }, [session, navigate]);
 
-    // Scroll to bottom on new messages
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [session?.messages]);
 
-    // Focus input after loading
     useEffect(() => {
         if (!isLoading) {
             inputRef.current?.focus();
@@ -72,14 +70,18 @@ const RoleplayPage: React.FC = () => {
         <div className="roleplay-page">
             {/* Sidebar */}
             <aside className={`roleplay-sidebar ${showSidebar ? 'open' : 'closed'}`}>
-                <button className="sidebar-toggle" onClick={() => setShowSidebar(!showSidebar)}>
-                    {showSidebar ? '←' : '→'}
+                <button
+                    className="sidebar-toggle"
+                    onClick={() => setShowSidebar(!showSidebar)}
+                    aria-label={showSidebar ? 'Ẩn sidebar' : 'Hiện sidebar'}
+                >
+                    {showSidebar ? <ChevronLeftIcon size={16} /> : <ChevronRightIcon size={16} />}
                 </button>
 
                 {showSidebar && (
                     <>
                         <div className="sidebar-section">
-                            <h3>👤 Khách hàng</h3>
+                            <h3><UserIcon size={14} /> Khách hàng</h3>
                             <div className="customer-info">
                                 <p className="customer-name">{getCustomerDisplayName(session.customer)}</p>
                                 <span className="personality-tag">{personality?.label || 'N/A'}</span>
@@ -90,7 +92,7 @@ const RoleplayPage: React.FC = () => {
                         </div>
 
                         <div className="sidebar-section">
-                            <h3>📊 Giai đoạn</h3>
+                            <h3><BarChartIcon size={14} /> Giai đoạn</h3>
                             <div className="stage-list">
                                 {stages.map((stage, index) => (
                                     <button
@@ -106,7 +108,7 @@ const RoleplayPage: React.FC = () => {
                         </div>
 
                         <div className="sidebar-section">
-                            <h3>💡 Tips</h3>
+                            <h3><LightbulbIcon size={14} /> Tips</h3>
                             {currentStage?.tips && (
                                 <ul className="tips-list">
                                     {(currentStage.tips as string[]).map((tip, i) => (
@@ -126,6 +128,11 @@ const RoleplayPage: React.FC = () => {
             {/* Main chat area */}
             <main className="roleplay-main">
                 <div className="chat-header">
+                    {!showSidebar && (
+                        <button className="btn-icon sidebar-open-btn" onClick={() => setShowSidebar(true)} aria-label="Mở sidebar">
+                            <PanelLeftIcon size={18} />
+                        </button>
+                    )}
                     <div className="chat-info">
                         <h2>{getCustomerDisplayName(session.customer)}</h2>
                         <span className="stage-badge">{currentStage?.name}</span>
@@ -135,7 +142,10 @@ const RoleplayPage: React.FC = () => {
                 <div className="chat-messages">
                     {session.messages.length === 0 && (
                         <div className="chat-empty">
-                            <p>💬 Bắt đầu cuộc trò chuyện với khách hàng</p>
+                            <div className="chat-empty-icon">
+                                <MessageSquareIcon size={32} />
+                            </div>
+                            <p>Bắt đầu cuộc trò chuyện với khách hàng</p>
                             <p className="text-sm text-gray">Gửi tin nhắn đầu tiên để mở đầu buổi tư vấn</p>
                         </div>
                     )}
@@ -179,8 +189,9 @@ const RoleplayPage: React.FC = () => {
                         className="btn btn-primary send-btn"
                         onClick={handleSend}
                         disabled={isLoading || !inputMessage.trim()}
+                        aria-label="Gửi tin nhắn"
                     >
-                        Gửi
+                        <SendIcon size={18} />
                     </button>
                 </div>
             </main>
@@ -189,7 +200,12 @@ const RoleplayPage: React.FC = () => {
             {showEndModal && (
                 <div className="modal-overlay" onClick={() => setShowEndModal(false)}>
                     <div className="modal" onClick={e => e.stopPropagation()}>
-                        <h3>Kết thúc phiên roleplay</h3>
+                        <div className="modal-header">
+                            <h3>Kết thúc phiên roleplay</h3>
+                            <button className="btn-icon modal-close" onClick={() => setShowEndModal(false)} aria-label="Đóng">
+                                <XIcon size={18} />
+                            </button>
+                        </div>
                         <p className="text-gray">Ghi chú kết quả buổi tư vấn:</p>
                         <textarea
                             className="textarea"
@@ -203,6 +219,7 @@ const RoleplayPage: React.FC = () => {
                                 Tiếp tục
                             </button>
                             <button className="btn btn-primary" onClick={handleEndSession}>
+                                <SaveIcon size={16} />
                                 Lưu & Kết thúc
                             </button>
                         </div>

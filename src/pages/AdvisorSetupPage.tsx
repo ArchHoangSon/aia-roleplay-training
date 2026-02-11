@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ADVISOR_PROFILE_FIELDS, DEFAULT_ADVISOR_PROFILE } from '../constants/advisorProfile';
 import { getAdvisorProfile, saveAdvisorProfile, exportProfileAsJSON, importProfileFromJSON } from '../services/storageService';
+import { UserIcon, UploadIcon, DownloadIcon, SaveIcon, EditIcon, CheckCircleIcon, AlertTriangleIcon, ArrowRightIcon } from '../components/common/Icons';
 import './AdvisorSetupPage.css';
 
 interface AdvisorProfile {
@@ -82,7 +83,6 @@ const AdvisorSetupPage: React.FC = () => {
             setImportStatus({ type: 'error', message: error.message });
         }
 
-        // Reset input
         e.target.value = '';
     };
 
@@ -148,19 +148,26 @@ const AdvisorSetupPage: React.FC = () => {
         <div className="advisor-setup-page">
             <div className="setup-container">
                 <div className="setup-header">
-                    <h1>👤 Hồ sơ Tư vấn viên</h1>
-                    <p className="subtitle">
-                        Thông tin này giúp tạo context prompt phù hợp với bạn
-                    </p>
+                    <div className="setup-header-icon">
+                        <UserIcon size={24} />
+                    </div>
+                    <div>
+                        <h1>Hồ sơ Tư vấn viên</h1>
+                        <p className="subtitle">
+                            Thông tin này giúp tạo context prompt phù hợp với bạn
+                        </p>
+                    </div>
                 </div>
 
                 {/* Import/Export Section */}
                 <div className="import-export-section">
-                    <button className="btn btn-ghost btn-sm" onClick={handleExport} disabled={!profile.name}>
-                        📤 Xuất JSON
+                    <button className="btn btn-ghost btn-sm" onClick={handleExport} disabled={!profile.name} aria-label="Xuất hồ sơ JSON">
+                        <UploadIcon size={14} />
+                        Xuất JSON
                     </button>
-                    <button className="btn btn-ghost btn-sm" onClick={handleImportClick}>
-                        📥 Nhập JSON
+                    <button className="btn btn-ghost btn-sm" onClick={handleImportClick} aria-label="Nhập hồ sơ JSON">
+                        <DownloadIcon size={14} />
+                        Nhập JSON
                     </button>
                     <input
                         type="file"
@@ -173,7 +180,8 @@ const AdvisorSetupPage: React.FC = () => {
 
                 {importStatus && (
                     <div className={`import-status ${importStatus.type}`}>
-                        {importStatus.type === 'success' ? '✅' : '⚠️'} {importStatus.message}
+                        {importStatus.type === 'success' ? <CheckCircleIcon size={16} /> : <AlertTriangleIcon size={16} />}
+                        {importStatus.message}
                     </div>
                 )}
 
@@ -203,18 +211,24 @@ const AdvisorSetupPage: React.FC = () => {
 
                             <div className="form-actions">
                                 <button className="btn btn-primary" onClick={handleSave}>
-                                    💾 Lưu hồ sơ
+                                    <SaveIcon size={16} />
+                                    Lưu hồ sơ
                                 </button>
                             </div>
                         </>
                     ) : (
                         <>
                             <div className="profile-summary">
-                                <h2>{profile.name}</h2>
-                                <div className="profile-meta">
-                                    {profile.gender && <span>{profile.gender}</span>}
-                                    {profile.age && <span>{profile.age} tuổi</span>}
-                                    {profile.experienceMonths && <span>{profile.experienceMonths} tháng kinh nghiệm</span>}
+                                <div className="profile-avatar">
+                                    <UserIcon size={28} />
+                                </div>
+                                <div>
+                                    <h2>{profile.name}</h2>
+                                    <div className="profile-meta">
+                                        {profile.gender && <span className="badge badge-info">{profile.gender}</span>}
+                                        {profile.age && <span className="badge badge-info">{profile.age} tuổi</span>}
+                                        {profile.experienceMonths && <span className="badge badge-primary">{profile.experienceMonths} tháng KN</span>}
+                                    </div>
                                 </div>
                             </div>
 
@@ -238,10 +252,12 @@ const AdvisorSetupPage: React.FC = () => {
 
                             <div className="form-actions">
                                 <button className="btn btn-secondary" onClick={() => setIsEditing(true)}>
-                                    ✏️ Chỉnh sửa
+                                    <EditIcon size={16} />
+                                    Chỉnh sửa
                                 </button>
                                 <button className="btn btn-primary" onClick={handleContinue}>
-                                    Tiếp tục → Tạo khách hàng
+                                    Tiếp tục
+                                    <ArrowRightIcon size={16} />
                                 </button>
                             </div>
                         </>

@@ -4,16 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import { CUSTOMER_FORM_FIELDS, DEFAULT_CUSTOMER_DATA } from '../constants/customerFormFields';
 import { FLOW_TYPES, SEGMENT_TYPES, getStagesForFlow } from '../constants/consultingFlows';
 import { getAdvisorProfile } from '../services/storageService';
+import { UsersIcon, DiamondIcon, RefreshIcon, PlusIcon, TargetIcon, LightbulbIcon, ArrowLeftIcon, ArrowRightIcon, CheckIcon } from '../components/common/Icons';
 import './CustomerSetupPage.css';
 
 const CustomerSetupPage: React.FC = () => {
     const navigate = useNavigate();
-    const [step, setStep] = useState(1); // 1: Flow/Segment, 2: Customer info, 3: Stage selection
+    const [step, setStep] = useState(1);
     const [flowType, setFlowType] = useState(FLOW_TYPES.NEW_CUSTOMER);
     const [segment, setSegment] = useState(SEGMENT_TYPES.MASS_MARKET);
     const [customerData, setCustomerData] = useState<any>(DEFAULT_CUSTOMER_DATA);
     const [advisorProfile, setAdvisorProfile] = useState<any>(null);
-    const [selectedStages, setSelectedStages] = useState<string[]>([]); // Array of stage ids
+    const [selectedStages, setSelectedStages] = useState<string[]>([]);
 
     useEffect(() => {
         const profile = getAdvisorProfile();
@@ -24,7 +25,6 @@ const CustomerSetupPage: React.FC = () => {
         setAdvisorProfile(profile);
     }, [navigate]);
 
-    // Reset stage selection when flow changes
     useEffect(() => {
         setSelectedStages([]);
     }, [flowType]);
@@ -55,16 +55,13 @@ const CustomerSetupPage: React.FC = () => {
         if (step === 1) {
             setStep(2);
         } else if (step === 2) {
-            // Validate name at minimum
             if (!customerData.name.trim()) {
                 alert('Vui lòng nhập tên khách hàng');
                 return;
             }
             setStep(3);
         } else {
-            // Step 3 -> Generate prompt
             if (selectedStages.length === 0) {
-                // Default to first stage if none selected
                 const firstStage = getStagesForFlow(flowType)[0];
                 setSelectedStages([firstStage.id]);
             }
@@ -93,7 +90,6 @@ const CustomerSetupPage: React.FC = () => {
 
         switch (fieldConfig.type) {
             case 'select':
-                // Handle object options (from PERSONALITY_TYPES, etc.)
                 const options = fieldConfig.options || [];
                 const isObjectOptions = options.length > 0 && typeof options[0] === 'object';
 
@@ -150,7 +146,6 @@ const CustomerSetupPage: React.FC = () => {
     };
 
     const renderSection = (sectionKey: string, sectionConfig: any) => {
-        // Skip HNW section if not HNW segment
         if (sectionConfig.showFor === 'hnw' && segment !== SEGMENT_TYPES.HNW) {
             return null;
         }
@@ -174,15 +169,30 @@ const CustomerSetupPage: React.FC = () => {
     return (
         <div className="customer-setup-page">
             <div className="setup-container">
+                {/* Progress Stepper */}
                 <div className="setup-progress">
-                    <div className={`progress-step ${step >= 1 ? 'active' : ''}`}>1. Luồng & Phân khúc</div>
-                    <div className={`progress-step ${step >= 2 ? 'active' : ''}`}>2. Thông tin KH</div>
-                    <div className={`progress-step ${step >= 3 ? 'active' : ''}`}>3. Chọn bước roleplay</div>
+                    <div className="progress-track">
+                        <div className="progress-fill" style={{ width: `${((step - 1) / 2) * 100}%` }} />
+                    </div>
+                    <div className="progress-steps">
+                        <div className={`progress-step ${step >= 1 ? 'active' : ''} ${step > 1 ? 'completed' : ''}`}>
+                            <div className="step-dot">{step > 1 ? <CheckIcon size={12} /> : '1'}</div>
+                            <span>Luồng & Phân khúc</span>
+                        </div>
+                        <div className={`progress-step ${step >= 2 ? 'active' : ''} ${step > 2 ? 'completed' : ''}`}>
+                            <div className="step-dot">{step > 2 ? <CheckIcon size={12} /> : '2'}</div>
+                            <span>Thông tin KH</span>
+                        </div>
+                        <div className={`progress-step ${step >= 3 ? 'active' : ''}`}>
+                            <div className="step-dot">3</div>
+                            <span>Chọn bước</span>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Step 1: Flow & Segment */}
                 {step === 1 && (
-                    <div className="setup-step">
+                    <div className="setup-step animate-in">
                         <h2>Chọn loại tư vấn</h2>
 
                         <div className="selection-group">
@@ -191,16 +201,22 @@ const CustomerSetupPage: React.FC = () => {
                                 <button
                                     className={`option-card ${flowType === FLOW_TYPES.NEW_CUSTOMER ? 'selected' : ''}`}
                                     onClick={() => setFlowType(FLOW_TYPES.NEW_CUSTOMER)}
+                                    aria-pressed={flowType === FLOW_TYPES.NEW_CUSTOMER}
                                 >
-                                    <span className="option-icon">🆕</span>
+                                    <div className="option-icon-wrap" style={{ background: 'var(--success-light)', color: 'var(--success)' }}>
+                                        <PlusIcon size={22} />
+                                    </div>
                                     <span className="option-title">Khách hàng Mới</span>
                                     <span className="option-desc">7 giai đoạn</span>
                                 </button>
                                 <button
                                     className={`option-card ${flowType === FLOW_TYPES.ECM ? 'selected' : ''}`}
                                     onClick={() => setFlowType(FLOW_TYPES.ECM)}
+                                    aria-pressed={flowType === FLOW_TYPES.ECM}
                                 >
-                                    <span className="option-icon">🔄</span>
+                                    <div className="option-icon-wrap" style={{ background: 'var(--info-light)', color: 'var(--info)' }}>
+                                        <RefreshIcon size={22} />
+                                    </div>
                                     <span className="option-title">ECM</span>
                                     <span className="option-desc">6 giai đoạn</span>
                                 </button>
@@ -213,16 +229,22 @@ const CustomerSetupPage: React.FC = () => {
                                 <button
                                     className={`option-card ${segment === SEGMENT_TYPES.MASS_MARKET ? 'selected' : ''}`}
                                     onClick={() => setSegment(SEGMENT_TYPES.MASS_MARKET)}
+                                    aria-pressed={segment === SEGMENT_TYPES.MASS_MARKET}
                                 >
-                                    <span className="option-icon">👥</span>
+                                    <div className="option-icon-wrap" style={{ background: 'var(--warning-light)', color: 'var(--warning)' }}>
+                                        <UsersIcon size={22} />
+                                    </div>
                                     <span className="option-title">Mass Market</span>
                                     <span className="option-desc">Khách hàng phổ thông</span>
                                 </button>
                                 <button
                                     className={`option-card ${segment === SEGMENT_TYPES.HNW ? 'selected' : ''}`}
                                     onClick={() => setSegment(SEGMENT_TYPES.HNW)}
+                                    aria-pressed={segment === SEGMENT_TYPES.HNW}
                                 >
-                                    <span className="option-icon">💎</span>
+                                    <div className="option-icon-wrap" style={{ background: '#F5F3FF', color: '#7C3AED' }}>
+                                        <DiamondIcon size={22} />
+                                    </div>
                                     <span className="option-title">HNW</span>
                                     <span className="option-desc">Khách hàng cao cấp</span>
                                 </button>
@@ -230,15 +252,21 @@ const CustomerSetupPage: React.FC = () => {
                         </div>
 
                         <div className="step-actions">
-                            <button className="btn btn-secondary" onClick={handleBack}>← Quay lại</button>
-                            <button className="btn btn-primary" onClick={handleNext}>Tiếp tục →</button>
+                            <button className="btn btn-secondary" onClick={handleBack}>
+                                <ArrowLeftIcon size={16} />
+                                Quay lại
+                            </button>
+                            <button className="btn btn-primary" onClick={handleNext}>
+                                Tiếp tục
+                                <ArrowRightIcon size={16} />
+                            </button>
                         </div>
                     </div>
                 )}
 
                 {/* Step 2: Customer Info Form */}
                 {step === 2 && (
-                    <div className="setup-step">
+                    <div className="setup-step animate-in">
                         <h2>Thông tin khách hàng</h2>
                         <p className="step-description">
                             Điền những gì bạn biết. Các trường để trống sẽ được AI bổ sung chi tiết.
@@ -249,15 +277,21 @@ const CustomerSetupPage: React.FC = () => {
                         )}
 
                         <div className="step-actions">
-                            <button className="btn btn-secondary" onClick={handleBack}>← Quay lại</button>
-                            <button className="btn btn-primary" onClick={handleNext}>Tiếp tục →</button>
+                            <button className="btn btn-secondary" onClick={handleBack}>
+                                <ArrowLeftIcon size={16} />
+                                Quay lại
+                            </button>
+                            <button className="btn btn-primary" onClick={handleNext}>
+                                Tiếp tục
+                                <ArrowRightIcon size={16} />
+                            </button>
                         </div>
                     </div>
                 )}
 
                 {/* Step 3: Stage Selection */}
                 {step === 3 && (
-                    <div className="setup-step">
+                    <div className="setup-step animate-in">
                         <h2>Chọn bước muốn roleplay</h2>
                         <p className="step-description">
                             Chọn các giai đoạn bạn muốn luyện tập. AI sẽ bắt đầu từ giai đoạn đầu tiên được chọn.
@@ -279,9 +313,13 @@ const CustomerSetupPage: React.FC = () => {
                                         key={stage.id}
                                         className={`stage-item ${selectedStages.includes(stage.id) ? 'selected' : ''}`}
                                         onClick={() => handleStageToggle(stage.id)}
+                                        role="checkbox"
+                                        aria-checked={selectedStages.includes(stage.id)}
+                                        tabIndex={0}
+                                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleStageToggle(stage.id); }}
                                     >
                                         <div className="stage-checkbox">
-                                            {selectedStages.includes(stage.id) ? '✓' : ''}
+                                            {selectedStages.includes(stage.id) && <CheckIcon size={14} />}
                                         </div>
                                         <div className="stage-number">{index + 1}</div>
                                         <div className="stage-content">
@@ -294,15 +332,20 @@ const CustomerSetupPage: React.FC = () => {
 
                             {selectedStages.length === 0 && (
                                 <p className="stage-hint">
-                                    💡 Nếu không chọn, AI sẽ bắt đầu từ giai đoạn đầu tiên
+                                    <LightbulbIcon size={14} />
+                                    Nếu không chọn, AI sẽ bắt đầu từ giai đoạn đầu tiên
                                 </p>
                             )}
                         </div>
 
                         <div className="step-actions">
-                            <button className="btn btn-secondary" onClick={handleBack}>← Quay lại</button>
+                            <button className="btn btn-secondary" onClick={handleBack}>
+                                <ArrowLeftIcon size={16} />
+                                Quay lại
+                            </button>
                             <button className="btn btn-primary" onClick={handleNext}>
-                                🎯 Tạo Context Prompt
+                                <TargetIcon size={16} />
+                                Tạo Context Prompt
                             </button>
                         </div>
                     </div>
